@@ -6,20 +6,28 @@ public class SleepEntry {
     private int restRating;
 
     SleepEntry(String[] args) {
-        boolean nextArgIsType = false;
-        ArgumentType argType;
+        boolean nextArgIsType = true;
+        ArgumentType argType = null;
         for (String arg : args) {
             if (nextArgIsType) {
                 argType = ArgumentType.getTypeFromFlag(arg);
                 nextArgIsType = false;
-                if (argType == null) {
-                    System.out.println("ERROR: Cannot read flag " + arg);
-                    System.exit(1);
-                }
                 continue;
             }
+            if (argType == null) {
+                System.out.println("ERROR: Cannot read argument " + arg);
+                System.exit(1);
+            }
+            System.out.println("Argument: " + arg);
             switch (argType) {
-
+                case BEDTIME:
+                    break;
+                case WAKEUPTIME:
+                    break;
+                case DATE:
+                    break;
+                case RATING:
+                    break;
             }
         }
     }
