@@ -5,6 +5,7 @@ public class App {
           System.exit(0);
         }
         SleepEntry entry = new SleepEntry(args);
+        Database db = new Database("sleep-data");
     }
 
     private static void printHelp() {
