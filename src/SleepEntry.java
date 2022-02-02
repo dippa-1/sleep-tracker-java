@@ -2,10 +2,17 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class SleepEntry {
+  private LocalDate date; // the date is not the actual date, when the user went to bed after 24:00. It then is the date of the day before for consistency
   private LocalTime bedTime;
   private LocalTime wakeupTime;
-  private LocalDate bedDate;
   private int restRating;
+
+  SleepEntry(LocalDate date, LocalTime bedTime, LocalTime wakeupTime, int restRating) {
+    this.date = date;
+    this.bedTime = bedTime;
+    this.wakeupTime = wakeupTime;
+    this.restRating = restRating;
+  }
 
   SleepEntry(String[] args) {
     boolean restRatingProvided = false;
@@ -53,8 +60,8 @@ public class SleepEntry {
             int year = Integer.parseInt(dateParts[0]);
             int month = Integer.parseInt(dateParts[1]);
             int day = Integer.parseInt(dateParts[2]);
-            this.bedDate = LocalDate.of(year, month, day);
-            System.out.println("Date: " + this.bedDate.toString());
+            this.date = LocalDate.of(year, month, day);
+            System.out.println("Date: " + this.date.toString());
           } catch (Exception e) {
             System.out.println("ERROR: Wrong date format!");
             System.exit(1);
@@ -83,7 +90,7 @@ public class SleepEntry {
       System.out.println("ERROR: No wake-up time provided!");
       System.exit(1);
     }
-    if (this.bedDate == null) {
+    if (this.date == null) {
       System.out.println("ERROR: No date provided!");
       System.exit(1);
     }
@@ -102,8 +109,8 @@ public class SleepEntry {
     return wakeupTime;
   }
 
-  public LocalDate getBedDate() {
-    return bedDate;
+  public LocalDate getDate() {
+    return date;
   }
 
   public int getRestRating() {

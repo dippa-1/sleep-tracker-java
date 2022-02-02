@@ -1,6 +1,13 @@
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Database {
   private String filepath;
@@ -9,27 +16,36 @@ public class Database {
   Database(String filepath) {
     this.filepath = filepath;
     this.load();
-    this.save();
   }
 
   public void add(SleepEntry entry) {
-    // this.entries
-
+    for (int i = 0; i < entries.size(); ++i) {
+      if (entry.getDate().equals(entries.get(i).getDate())) {
+        // TODO: ask user to overwrite
+        entries.set(i, entry);
+        break;
+      }
+    }
+    this.entries.add(entry);
+    this.save();
   }
 
   public ArrayList<SleepEntry> getEntries() {
     return this.entries;
   }
 
+  // not needed actually
   private void sort() {
-    if (this.filepath == null)
+    if (this.filepath == null) {
       return;
+    }
 
   }
 
   private void save() {
-    if (this.filepath == null)
+    if (this.filepath == null) {
       return;
+    }
 
     try (PrintWriter writer = new PrintWriter(this.filepath + ".csv")) {
 
@@ -43,14 +59,18 @@ public class Database {
       sb.append("rating");
       sb.append('\n');
 
-      sb.append("1");
-      sb.append(',');
-      sb.append("Prashant Ghimire");
-      sb.append('\n');
+      for (SleepEntry e : entries) {
+        sb.append(e.getDate().toString());
+        sb.append(',');
+        sb.append(e.getBedTime().toString());
+        sb.append(',');
+        sb.append(e.getWakeupTime().toString());
+        sb.append(',');
+        sb.append(e.getRestRating());
+        sb.append('\n');
+      }
 
       writer.write(sb.toString());
-
-      System.out.println("done!");
 
     } catch (FileNotFoundException e) {
       System.out.println(e.getMessage());
@@ -59,9 +79,44 @@ public class Database {
   }
 
   private void load() {
-    if (this.filepath == null)
+    if (this.filepath == null) {
       return;
+    }
     this.entries = new ArrayList<SleepEntry>();
+
+    ArrayList<ArrayList<String>> records = new ArrayList<>();
+    Map<String, Integer> csvHeaderIndexes = new HashMap<>();
+    try (BufferedReader br = new BufferedReader(new FileReader(this.filepath + ".csv"))) {
+      String line;
+      for (int lineNumber = 1; (line = br.readLine()) != null; ++lineNumber) {
+        String[] values = line.split(",");
+        if (lineNumber == 1) {
+          // just in case a human created a new csv file and switched the order.
+          for (int i = 0; i < values.length; ++i) {
+            csvHeaderIndexes.put(values[i], i);
+          }
+          continue;
+        }
+        if (values.length != csvHeaderIndexes.size())
+          continue;
+        records.add(new ArrayList<>(Arrays.asList(values)));
+        try {
+          LocalDate date = LocalDate.parse(values[csvHeaderIndexes.get("date")]);
+          LocalTime bedTime = LocalTime.parse(values[csvHeaderIndexes.get("bed")]);
+          LocalTime wakeupTime = LocalTime.parse(values[csvHeaderIndexes.get("wakeup")]);
+          int restRating = Integer.parseInt(values[csvHeaderIndexes.get("rating")]);
+          SleepEntry entry = new SleepEntry(date, bedTime, wakeupTime, restRating);
+          this.entries.add(entry);
+        } catch (Exception e) {
+          System.out.println("ERROR: Could not parse database.");
+          System.out.println("Line buffer: " + line);
+          System.out.println("Message: " + e.getMessage());
+          System.exit(1);
+        }
+      }
+    } catch (Exception e) {
+      // Could not read database, maybe it's empty or doesn't exist, so continue.
+    }
 
   }
 }
