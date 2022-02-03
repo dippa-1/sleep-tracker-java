@@ -34,6 +34,7 @@ public class Database {
         return;
       }
     }
+    // entry doesn't exist yet
     this.entries.add(entry);
     this.save();
   }
