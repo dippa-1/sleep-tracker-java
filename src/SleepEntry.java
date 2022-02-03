@@ -117,4 +117,12 @@ public class SleepEntry {
     return restRating;
   }
 
+  public LocalTime getSleepDuration() {
+    return this.wakeupTime.minusHours(this.bedTime.getHour()).minusMinutes(this.bedTime.getMinute());
+  }
+
+  public String toString() {
+    return "Date: " + this.date.toString() + " | Bedtime: " + this.bedTime.toString() + " | Wakeup: " + this.wakeupTime.toString() + " | Rating: " + this.restRating;
+  }
+
 }
