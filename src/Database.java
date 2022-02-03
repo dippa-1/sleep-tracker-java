@@ -23,7 +23,7 @@ public class Database {
     for (int i = 0; i < entries.size(); ++i) {
       if (entry.getDate().equals(entries.get(i).getDate())) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Entry already exists for " + entry.getDate() + ". Overwrite? (y/n)");
+        System.out.print("Entry already exists for " + entry.getDate() + ". Overwrite? (y/n) ");
         String input = scanner.nextLine();
         if (input.equals("y")) {
           entries.set(i, entry);
