@@ -20,17 +20,21 @@ public class Database {
   }
 
   public void add(SleepEntry entry) {
+    System.out.println("Input: " + entry);
+
     for (int i = 0; i < entries.size(); ++i) {
       if (entry.getDate().equals(entries.get(i).getDate())) {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Entry already exists for " + entry.getDate() + ". Overwrite? (y/n) ");
+        System.out.print("Entry already exists for " + entry.getDate() + ". Overwrite? [Y/n] ");
         String input = scanner.nextLine();
-        if (input.equals("y")) {
+        if (input.toLowerCase().equals("y") || input.isEmpty()) {
           entries.set(i, entry);
           this.save();
+          System.out.println("Overwritten.");
+        } else {
+          System.out.println("Aborted.");
         }
         scanner.close();
-        this.save();
         return;
       }
     }

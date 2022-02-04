@@ -13,3 +13,6 @@ list: all
 
 stats: all
 	@java -cp bin App stats
+
+junk: all
+	@java -cp bin App junk

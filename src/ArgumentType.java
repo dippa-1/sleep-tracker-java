@@ -24,15 +24,7 @@ public enum ArgumentType {
   }
 
   public static ArgumentType getTypeFromFlag(String flag) {
-    // for (ArgumentType e : values()) {
-    // if (e.flag.equals(flag) || e.longFlag.equals(flag)) {
-    // return e;
-    // }
-    // }
-
-    // return null;
     return BY_FLAG.get(flag);
-
   }
 
   public static ArgumentType getTypeFromName(String name) {
