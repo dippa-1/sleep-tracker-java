@@ -128,4 +128,136 @@ public class Database {
     }
 
   }
+
+  public String toString() {
+    StringBuilder string = new StringBuilder();
+    for (int i = 0; i < this.entries.size(); ++i) {
+      string.append(this.entries.get(i).toString());
+      if (i == this.entries.size() - 1) break;
+      string.append('\n');
+    }
+    return string.toString();
+  }
+
+  public void printStats() {
+    // print general entries stats. assumes that the entries are sorted by date
+    int entriesSize = entries.size();
+    if (entriesSize == 0) {
+      System.out.println("No entries");
+      return;
+    }
+    LocalDate firstDate = entries.get(0).getDate();
+    LocalDate lastDate = entries.get(entriesSize - 1).getDate();
+    System.out.format("%40s: %s\n", "First entry", firstDate);
+    System.out.format("%40s: %s\n", "Last entry", lastDate);
+    System.out.format("%40s: %d\n", "Total entries", entriesSize);
+    System.out.format("%40s: %d\n", "Total days", lastDate.getDayOfYear() - firstDate.getDayOfYear() + 1);
+
+    // calculate mean bedtime
+    LocalTime meanBedTime;
+    if (entriesSize == 0) {
+      meanBedTime = LocalTime.of(0, 0);
+    } else {
+      int totalSeconds = 0;
+      for (SleepEntry e : entries) {
+        totalSeconds += e.getBedTime().toSecondOfDay();
+      }
+      totalSeconds /= entriesSize;
+      int hours = totalSeconds / 3600;
+      int minutes = (totalSeconds % 3600) / 60;
+      int seconds = totalSeconds % 60;
+      meanBedTime = LocalTime.of(hours, minutes, seconds);
+    }
+    // print
+    System.out.format("%40s: %s\n", "Mean bedtime", meanBedTime);
+
+    // calculate mean wakeup time
+    LocalTime meanWakeupTime;
+    if (entriesSize == 0) {
+      meanWakeupTime = LocalTime.of(0, 0);
+    } else {
+      int totalSeconds = 0;
+      for (SleepEntry e : entries) {
+        totalSeconds += e.getWakeupTime().toSecondOfDay();
+      }
+      totalSeconds /= entriesSize;
+      int hours = totalSeconds / 3600;
+      int minutes = (totalSeconds % 3600) / 60;
+      int seconds = totalSeconds % 60;
+      meanWakeupTime = LocalTime.of(hours, minutes, seconds);
+    }
+    // print
+    System.out.format("%40s: %s\n", "Mean wakeup time", meanWakeupTime);
+
+    // calculate mean rest rating
+    double meanRestRating;
+    if (entriesSize == 0) {
+      meanRestRating = 0;
+    } else {
+      double totalRestRating = 0;
+      for (SleepEntry e : entries) {
+        totalRestRating += e.getRestRating();
+      }
+      meanRestRating = totalRestRating / entriesSize;
+    }
+    // print
+    System.out.format("%40s: %.2f\n", "Mean rest rating", meanRestRating);
+
+    // calculate mean sleep duration
+    LocalTime meanSleepDuration;
+    if (entriesSize == 0) {
+      meanSleepDuration = LocalTime.of(0, 0);
+    } else {
+      int totalSeconds = 0;
+      for (SleepEntry e : entries) {
+        totalSeconds += e.getSleepDuration().toSecondOfDay();
+      }
+      totalSeconds /= entriesSize;
+      int hours = totalSeconds / 3600;
+      int minutes = (totalSeconds % 3600) / 60;
+      int seconds = totalSeconds % 60;
+      meanSleepDuration = LocalTime.of(hours, minutes, seconds);
+    }
+    // print
+    System.out.format("%40s: %s\n", "Mean sleep duration", meanSleepDuration);
+
+    // count the longest consecutive entries with a rating of 4 and above
+    int longestConsecutive = 0;
+    int currentConsecutive = 0;
+    for (SleepEntry e : entries) {
+      if (e.getRestRating() >= 4) {
+        ++currentConsecutive;
+      } else {
+        if (currentConsecutive > longestConsecutive) {
+          longestConsecutive = currentConsecutive;
+        }
+        currentConsecutive = 0;
+      }
+    }
+    if (currentConsecutive > longestConsecutive) {
+      longestConsecutive = currentConsecutive;
+    }
+    // print
+    System.out.format("%40s: %d\n", "Longest awake streak (4 and better)", longestConsecutive);
+
+    // count the longest consecutive entries with a rating of 2 and below
+    longestConsecutive = 0;
+    currentConsecutive = 0;
+    for (SleepEntry e : entries) {
+      if (e.getRestRating() <= 2) {
+        ++currentConsecutive;
+      } else {
+        if (currentConsecutive > longestConsecutive) {
+          longestConsecutive = currentConsecutive;
+        }
+        currentConsecutive = 0;
+      }
+    }
+    if (currentConsecutive > longestConsecutive) {
+      longestConsecutive = currentConsecutive;
+    }
+    // print
+    System.out.format("%40s: %d\n", "Longest slump (2 and below)", longestConsecutive);
+  }
+
 }

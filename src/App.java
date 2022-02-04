@@ -43,85 +43,13 @@ public class App {
         db.add(entry);
         break;
       case "list":
-        ArrayList<SleepEntry> entries = db.getEntries();
-        for (SleepEntry e : entries) {
-          System.out.println(e.toString());
-        }
+        System.out.println(db);
         break;
       case "help":
         printHelp();
         break;
       case "stats":
-        // calculate mean bedtime
-        LocalTime meanBedTime;
-        ArrayList<SleepEntry> _entries = db.getEntries();
-        int entriesSize = _entries.size();
-        if (entriesSize == 0) {
-          meanBedTime = LocalTime.of(0, 0);
-        } else {
-          int totalSeconds = 0;
-          for (SleepEntry e : _entries) {
-            totalSeconds += e.getBedTime().toSecondOfDay();
-          }
-          totalSeconds /= entriesSize;
-          int hours = totalSeconds / 3600;
-          int minutes = (totalSeconds % 3600) / 60;
-          int seconds = totalSeconds % 60;
-          meanBedTime = LocalTime.of(hours, minutes, seconds);
-        }
-        // print
-        System.out.println("Mean bedtime: " + meanBedTime);
-
-        // calculate mean wakeup time
-        LocalTime meanWakeupTime;
-        if (entriesSize == 0) {
-          meanWakeupTime = LocalTime.of(0, 0);
-        } else {
-          int totalSeconds = 0;
-          for (SleepEntry e : _entries) {
-            totalSeconds += e.getWakeupTime().toSecondOfDay();
-          }
-          totalSeconds /= entriesSize;
-          int hours = totalSeconds / 3600;
-          int minutes = (totalSeconds % 3600) / 60;
-          int seconds = totalSeconds % 60;
-          meanWakeupTime = LocalTime.of(hours, minutes, seconds);
-        }
-        // print
-        System.out.println("Mean wakeup time: " + meanWakeupTime);
-
-        // calculate mean rest rating
-        double meanRestRating;
-        if (entriesSize == 0) {
-          meanRestRating = 0;
-        } else {
-          double totalRestRating = 0;
-          for (SleepEntry e : _entries) {
-            totalRestRating += e.getRestRating();
-          }
-          meanRestRating = totalRestRating / entriesSize;
-        }
-        // print
-        System.out.println("Mean rest rating: " + meanRestRating);
-
-        // calculate mean sleep duration
-        LocalTime meanSleepDuration;
-        if (entriesSize == 0) {
-          meanSleepDuration = LocalTime.of(0, 0);
-        } else {
-          int totalSeconds = 0;
-          for (SleepEntry e : _entries) {
-            totalSeconds += e.getSleepDuration().toSecondOfDay();
-          }
-          totalSeconds /= entriesSize;
-          int hours = totalSeconds / 3600;
-          int minutes = (totalSeconds % 3600) / 60;
-          int seconds = totalSeconds % 60;
-          meanSleepDuration = LocalTime.of(hours, minutes, seconds);
-        }
-        // print
-        System.out.println("Mean sleep duration: " + meanSleepDuration);
-
+        db.printStats();
         break;
       default:
         System.out.println("Command " + args[0] + " not found.");
