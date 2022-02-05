@@ -82,7 +82,6 @@ public class ArgumentParser {
       }
       if (this.date == null) {
         // It's ok to have no date, because we can infer it from the database
-        // throw new Exception("No date provided!");
       }
       if (!restRatingProvided) {
         throw new Exception("No rating provided!");
