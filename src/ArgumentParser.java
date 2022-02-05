@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 public class ArgumentParser {
   private Command command;
-  // private String[] rawArgs; // e.g. -d 2020-01-01, -b 23:12, -w 8:30, -r 3
   private LocalDate date;
   private LocalTime bedTime;
   private LocalTime wakeupTime;
@@ -13,7 +12,6 @@ public class ArgumentParser {
   public ArgumentParser(String[] args) throws Exception {
     try {
       this.command = Command.getCommandFromString(args[0]);
-      // System.out.println(this.command.command);
     } catch (Exception e) {
       throw new Exception("ArgumentParser.java: Could not get command from string. \n" + e.getMessage());
     }
@@ -39,9 +37,7 @@ public class ArgumentParser {
               int minute = Integer.parseInt(timeParts[1]);
               this.bedTime = LocalTime.of(hour, minute);
             } catch (Exception e) {
-              // TODO : throw bedtime exception
-              System.out.println("ERROR: Wrong bedtime format!");
-              System.exit(1);
+              throw new BedInputException("ArgumentParser.java: Could not parse bedtime from '" + arg + "'\n" + e.getMessage());
             }
             break;
           case WAKEUPTIME:
@@ -51,9 +47,7 @@ public class ArgumentParser {
               int minute = Integer.parseInt(timeParts[1]);
               this.wakeupTime = LocalTime.of(hour, minute);
             } catch (Exception e) {
-              // TODO : throw wakeup time exception
-              System.out.println("ERROR: Wrong wake-up time format!");
-              System.exit(1);
+              throw new WakeInputException("ArgumentParser.java: Could not parse wakeup time from '" + arg + "'\n" + e.getMessage());
             }
             break;
           case DATE:
@@ -64,9 +58,7 @@ public class ArgumentParser {
               int day = Integer.parseInt(dateParts[2]);
               this.date = LocalDate.of(year, month, day);
             } catch (Exception e) {
-              // TODO : throw date exception
-              System.out.println("ERROR: Wrong date format!");
-              System.exit(1);
+              throw new DateInputException("ArgumentParser.java: Could not parse date from '" + arg + "'\n" + e.getMessage());
             }
             break;
           case RATING:
@@ -74,9 +66,7 @@ public class ArgumentParser {
               this.restRating = Integer.parseInt(arg);
               restRatingProvided = true;
             } catch (Exception e) {
-              // TODO : throw rating exception
-              System.out.println("ERROR: Rating must be a number!");
-              System.exit(1);
+              throw new RatingInputException("ArgumentParser.java: Could not parse rating from '" + arg + "'\n" + e.getMessage());
             }
             break;
         }
