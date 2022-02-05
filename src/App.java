@@ -71,7 +71,6 @@ public class App {
       System.out.println("Please try again.");
       System.exit(1);
     } catch (Exception e) {
-      // System.out.println("App.java: Could not parse arguments.\n" + e.getMessage());
       printHelp();
       System.exit(1);
     }
