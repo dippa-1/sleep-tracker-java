@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class SleepOptimizer {
   public static void main(String[] args) throws Exception {
@@ -33,7 +34,23 @@ public class SleepOptimizer {
             date = argParser.getDate();
           }
           SleepEntry entry = new SleepEntry(date, argParser.getBedTime(), argParser.getWakeupTime(), argParser.getRestRating());
-          db.add(entry);
+          try {
+            db.add(entry, false);
+          } catch (SleepEntryAlreadyExistsException e) {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Entry already exists for " + entry.getDate() + ". Overwrite? [Y/n] ");
+            String input = scanner.nextLine();
+            if (input.toLowerCase().equals("y") || input.isEmpty()) {
+              db.add(entry, true);
+              System.out.println("Overwritten.");
+            } else {
+              System.out.println("Aborted.");
+            }
+            scanner.close();
+          } finally {
+            db.sort();
+            db.save();
+          }
           break;
         case LIST:
           System.out.println(db);

@@ -4,11 +4,7 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Database {
   private String filepath;
@@ -19,28 +15,20 @@ public class Database {
     this.load();
   }
 
-  public void add(SleepEntry entry) {
+  public void add(SleepEntry entry, boolean overwrite) throws SleepEntryAlreadyExistsException {
     System.out.println("Input: " + entry);
 
     for (int i = 0; i < entries.size(); ++i) {
-      if (entry.getDate().equals(entries.get(i).getDate())) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Entry already exists for " + entry.getDate() + ". Overwrite? [Y/n] ");
-        String input = scanner.nextLine();
-        if (input.toLowerCase().equals("y") || input.isEmpty()) {
-          entries.set(i, entry);
-          this.save();
-          System.out.println("Overwritten.");
-        } else {
-          System.out.println("Aborted.");
+        if (entry.getDate().equals(entries.get(i).getDate())) {
+          if (overwrite) {
+            entries.set(i, entry);
+            return;
+          }
+          throw new SleepEntryAlreadyExistsException("Entry already exists");
         }
-        scanner.close();
-        return;
-      }
     }
     // entry doesn't exist yet
     this.entries.add(entry);
-    this.save();
   }
 
   public ArrayList<SleepEntry> getEntries() {
@@ -48,14 +36,19 @@ public class Database {
   }
 
   // not needed actually
-  private void sort() {
+  public void sort() {
     if (this.filepath == null) {
       return;
     }
+    if (this.entries.size() == 0) {
+      return;
+    }
+
+    Collections.sort(this.entries, (a, b) -> a.getDate().compareTo(b.getDate()));
 
   }
 
-  private void save() {
+  public void save() {
     if (this.filepath == null) {
       return;
     }
