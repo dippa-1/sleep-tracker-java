@@ -8,6 +8,8 @@ public class TimeSeries<T extends Comparable<T>> {
 
   public TimeSeries(String name) {
     this.name = name;
+    this.dates = new ArrayList<LocalDate>();
+    this.values = new ArrayList<T>();
   }
 
   public String getName() {
