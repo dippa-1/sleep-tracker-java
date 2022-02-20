@@ -1,9 +1,10 @@
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 class ChartPanel extends JPanel {
@@ -44,47 +45,27 @@ class ChartPanel extends JPanel {
             System.out.println(restRating);
         }
 
+
+        // Vertical alignment: title&legend -> actual chart
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        JPanel titleAndLegend = new JPanel();
+        titleAndLegend.setLayout(new BoxLayout(titleAndLegend, BoxLayout.X_AXIS));
+        titleAndLegend.add(new JLabel("History"));
+        titleAndLegend.add(new JLabel("Bedtime"));
+        titleAndLegend.add(new JLabel("Sleep duration"));
+        titleAndLegend.add(new JLabel("Rest rating"));
+        this.add(titleAndLegend);
+
+        // add timeseries panel
+        this.add(new TimeSeriesPanel(this.timeSeries));
+
+
     }
 
     // This paints a legend, an x-axis (dates) and a y-axis with three series (rest rating, sleep duration and )
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        Graphics2D g2 = (Graphics2D) g;
-
-        // constants
-        final int paddingX = 20;
-        final int paddingY = 20;
-        final int axisWidth = 2;
-        final Color primaryColor = Color.BLACK;
-        final Color bedtimeColor = Color.BLUE;
-        final Color sleepDurationColor = Color.GREEN;
-        final Color restRatingColor = Color.RED;
-
-        // draw legend
-        final int estimatedLegendTextWidth = 80;
-        g2.setColor(bedtimeColor);
-        g2.drawString("Bedtime", paddingX, paddingY);
-        g2.setColor(sleepDurationColor);
-        g2.drawString("Sleep duration", getWidth()/2 - estimatedLegendTextWidth, paddingY);
-        g2.setColor(restRatingColor);
-        g2.drawString("Rest rating", getWidth() - estimatedLegendTextWidth, paddingY);
-
-        // draw x-axis
-        g2.setColor(primaryColor);
-        g2.fillRect(paddingX, getHeight() - paddingY, getWidth() - paddingX, getHeight() - paddingY - axisWidth);
-
-        // draw y-axis
-        g2.fillRect(paddingX, paddingY, paddingX + axisWidth, getHeight() - paddingY);
-
-        // draw series
-
-
-
-
-        // draw rectangle
-        // g.setColor(new Color(0xaa, 0xaa, 0xaa));
-        // g.fillRect(1, 1, getWidth() - 2, getHeight() - 1);
     }
 }
