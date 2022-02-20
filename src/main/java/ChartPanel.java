@@ -51,6 +51,8 @@ class ChartPanel extends JPanel {
 
         JPanel titleAndLegend = new JPanel();
         titleAndLegend.setLayout(new BoxLayout(titleAndLegend, BoxLayout.X_AXIS));
+        JLabel historyLabel = new JLabel("History");
+        historyLabel.setFont(new Font("Arial", Font.BOLD, 20));
         titleAndLegend.add(new JLabel("History"));
         titleAndLegend.add(new JLabel("Bedtime"));
         titleAndLegend.add(new JLabel("Sleep duration"));

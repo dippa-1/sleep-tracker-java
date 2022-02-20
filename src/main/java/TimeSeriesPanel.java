@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
@@ -13,6 +14,8 @@ public class TimeSeriesPanel extends JPanel {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
 
+    this.setBackground(Color.LIGHT_GRAY);
+
 
     Graphics2D g2 = (Graphics2D) g;
 
@@ -20,22 +23,15 @@ public class TimeSeriesPanel extends JPanel {
     final int paddingX = 20;
     final int paddingY = 20;
     final int axisWidth = 2;
-
-
-    final int estimatedLegendTextWidth = 80;
-    g2.setColor(Constants.bedtimeColor);
-    g2.drawString("Bedtime", paddingX, paddingY);
-    g2.setColor(Constants.sleepDurationColor);
-    g2.drawString("Sleep duration", getWidth()/2 - estimatedLegendTextWidth, paddingY);
-    g2.setColor(Constants.restRatingColor);
-    g2.drawString("Rest rating", getWidth() - estimatedLegendTextWidth, paddingY);
+    final int height = this.getHeight();
+    final int width = this.getWidth();
 
     // draw x-axis
     g2.setColor(Constants.primaryColor);
-    g2.fillRect(paddingX, getHeight() - paddingY, getWidth() - paddingX, getHeight() - paddingY - axisWidth);
+    g2.fillRect(paddingX, height - paddingY, width - paddingX, height - paddingY - 1);
 
     // draw y-axis
-    g2.fillRect(paddingX, paddingY, paddingX + axisWidth, getHeight() - paddingY);
+    // g2.fillRect(paddingX, paddingY, paddingX + axisWidth, getHeight() - paddingY);
 
   }
 }
