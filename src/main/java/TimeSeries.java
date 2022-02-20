@@ -6,30 +6,8 @@ public class TimeSeries<T extends Comparable<T>> {
   private ArrayList<LocalDate> dates;
   private ArrayList<T> values;
 
-  public TimeSeries(String name, ArrayList<LocalDate> dates, ArrayList<T> values) throws IllegalArgumentException {
+  public TimeSeries(String name) {
     this.name = name;
-
-    if (dates.size() != values.size()) {
-      throw new IllegalArgumentException("dates and values should have the same size");
-    }
-
-    // each date belong to one value. Both should be sorted by date in ascending order
-    for (int i = 0; i < dates.size(); ++i) {
-      for (int j = i + 1; j < dates.size(); ++j) {
-        if (dates.get(i).isAfter(dates.get(j))) {
-          LocalDate tmpDate = dates.get(i);
-          dates.set(i, dates.get(j));
-          dates.set(j, tmpDate);
-
-          T tmpValue = values.get(i);
-          values.set(i, values.get(j));
-          values.set(j, tmpValue);
-        }
-      }
-    }
-
-    this.dates = dates;
-    this.values = values;
   }
 
   public String getName() {
@@ -70,6 +48,16 @@ public class TimeSeries<T extends Comparable<T>> {
       }
     }
     return min;
+  }
+
+  // inserts the next datapoint sorted
+  public void insert(LocalDate date, T value) {
+    int i = 0;
+    while (i < this.dates.size() && this.dates.get(i).compareTo(date) < 0) {
+      ++i;
+    }
+    this.dates.add(i, date);
+    this.values.add(i, value);
   }
 
 }
