@@ -20,7 +20,7 @@ public class GUI extends JFrame {
 
         NewEntryPanel newEntryPanel = new NewEntryPanel(db);
         newEntryPanel.setMaximumSize(new Dimension(gui.getWidth(), 60));
-        ChartPanel chartPanel = new ChartPanel();
+        ChartPanel chartPanel = new ChartPanel(db);
 
         container.add(newEntryPanel);
         container.add(chartPanel);
