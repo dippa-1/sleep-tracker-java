@@ -53,17 +53,30 @@ class ChartPanel extends JPanel {
 
         Graphics2D g2 = (Graphics2D) g;
 
+        // constants
+        final int paddingX = 20;
+        final int paddingY = 20;
+        final int axisWidth = 2;
+        final Color primaryColor = Color.BLACK;
+        final Color bedtimeColor = Color.BLUE;
+        final Color sleepDurationColor = Color.GREEN;
+        final Color restRatingColor = Color.RED;
+
         // draw legend
-        g2.setColor(Color.BLACK);
-        g2.drawString("Rest rating", 10, 20);
-        g2.drawString("Sleep duration", 10, 40);
+        final int estimatedLegendTextWidth = 80;
+        g2.setColor(bedtimeColor);
+        g2.drawString("Bedtime", paddingX, paddingY);
+        g2.setColor(sleepDurationColor);
+        g2.drawString("Sleep duration", getWidth()/2 - estimatedLegendTextWidth, paddingY);
+        g2.setColor(restRatingColor);
+        g2.drawString("Rest rating", getWidth() - estimatedLegendTextWidth, paddingY);
 
         // draw x-axis
-        g2.setColor(Color.BLACK);
-        g2.drawLine(10, getHeight() - 10, getWidth() - 10, getHeight() - 10);
+        g2.setColor(primaryColor);
+        g2.fillRect(paddingX, getHeight() - paddingY, getWidth() - paddingX, getHeight() - paddingY - axisWidth);
 
         // draw y-axis
-        g2.drawLine(10, 10, 10, getHeight() - 10);
+        g2.fillRect(paddingX, paddingY, paddingX + axisWidth, getHeight() - paddingY);
 
         // draw series
 
