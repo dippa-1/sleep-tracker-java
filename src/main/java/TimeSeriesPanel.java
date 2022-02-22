@@ -1,7 +1,4 @@
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,11 +13,15 @@ public class TimeSeriesPanel extends JPanel {
     this.timeSeries = timeSeries;
   }
 
+  private int progressToPixel(int start, int end, double progressPercent) {
+    return (int) (start + (end - start) * progressPercent);
+  }
+
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
 
-    this.setBackground(Color.LIGHT_GRAY);
+    // this.setBackground(Color.LIGHT_GRAY);
 
 
     Graphics2D g2 = (Graphics2D) g;
@@ -119,9 +120,62 @@ public class TimeSeriesPanel extends JPanel {
     }
 
 
+    // draw rest rating graph
+    g2.setColor(this.timeSeries[2].getColor());
+    g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+    int previousX = pl;
+    int previousY = progressToPixel(pt, pt + usableHeight, (double) (maxRating - (int) this.timeSeries[2].getValues().get(0)) / (maxRating - minRating));
+    for (int i = 1; i < this.timeSeries[2].getDates().size(); ++i) {
+      final double xProgress = (double) i / (this.timeSeries[2].getDates().size() - 1);
+      int x = progressToPixel(pl, pl + usableWidth, xProgress);
 
+      final double yProgress = (double) (maxRating - (int) this.timeSeries[2].getValues().get(i)) / (maxRating - minRating);
+      int y = progressToPixel(pt, pt + usableHeight, yProgress);
 
+      g2.drawLine(previousX, previousY, x, y);
+      previousX = x;
+      previousY = y;
+    }
 
+    // draw bedtime graph
+    g2.setColor(this.timeSeries[0].getColor());
+    g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+    previousX = pl;
+    LocalTime time = (LocalTime) this.timeSeries[0].getValues().get(0);
+    double hourMinute = time.getHour() + time.getMinute() / 60.0;
+    previousY = progressToPixel(pt, pt + usableHeight, (maxHour - hourMinute) / (maxHour - minHour));
+    for (int i = 1; i < this.timeSeries[0].getDates().size(); ++i) {
+      int x = pl + usableWidth * i / (this.timeSeries[0].getDates().size() - 1);
+      time = (LocalTime) this.timeSeries[0].getValues().get(i);
+      hourMinute = time.getHour() + time.getMinute() / 60.0;
+      int y = progressToPixel(pt, pt + usableHeight, (maxHour - hourMinute) / (maxHour - minHour));
+      g2.drawLine(previousX, previousY, x, y);
+      previousX = x;
+      previousY = y;
+    }
+
+    // draw duration graph
+    g2.setColor(this.timeSeries[1].getColor());
+    g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+    previousX = pl;
+    time = (LocalTime) this.timeSeries[1].getValues().get(0);
+    hourMinute = time.getHour() + time.getMinute() / 60.0;
+    previousY = progressToPixel(pt, pt + usableHeight, (maxHourDuration - hourMinute) / (maxHourDuration - minHourDuration));
+    for (int i = 1; i < this.timeSeries[1].getDates().size(); ++i) {
+      int x = pl + usableWidth * i / (this.timeSeries[1].getDates().size() - 1);
+      time = (LocalTime) this.timeSeries[1].getValues().get(i);
+      hourMinute = time.getHour() + time.getMinute() / 60.0;
+      int y = progressToPixel(pt, pt + usableHeight, (maxHourDuration - hourMinute) / (maxHourDuration - minHourDuration));
+      g2.drawLine(previousX, previousY, x, y);
+      previousX = x;
+      previousY = y;
+    }
 
   }
+
+  public void setTimeSeries(TimeSeries[] timeSeries) {
+    this.timeSeries = timeSeries;
+    this.repaint();
+  }
+
 }

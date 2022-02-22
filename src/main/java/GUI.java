@@ -18,13 +18,15 @@ public class GUI extends JFrame {
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         gui.add(container);
 
-        NewEntryPanel newEntryPanel = new NewEntryPanel(db);
-        newEntryPanel.setMaximumSize(new Dimension(gui.getWidth(), 60));
         ChartPanel chartPanel = new ChartPanel(db.getEntries());
+        NewEntryPanel newEntryPanel = new NewEntryPanel(db);
+        newEntryPanel.addNewEntryListener(chartPanel);
+        newEntryPanel.setMaximumSize(new Dimension(gui.getWidth(), 60));
 
         container.add(newEntryPanel);
         container.add(chartPanel);
 
         gui.setVisible(true);
     }
+
 }

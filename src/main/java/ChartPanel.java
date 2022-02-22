@@ -7,28 +7,13 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-class ChartPanel extends JPanel {
-    // private Database db;
+class ChartPanel extends JPanel implements NewEntryListener {
     private TimeSeries[] timeSeries;
+    private TimeSeriesPanel timeSeriesPanel;
 
     public ChartPanel(ArrayList<SleepEntry> entries) {
-        // this.db = db;
 
-        this.timeSeries = new TimeSeries[3];
-        this.timeSeries[0] = new TimeSeries<LocalTime>("Bedtime", Color.BLUE);
-        this.timeSeries[1] = new TimeSeries<LocalTime>("Sleep duration", Color.RED);
-        this.timeSeries[2] = new TimeSeries<Integer>("Rest rating", Color.GREEN);
-
-        // get entries
-        // ArrayList<SleepEntry> entries = db.getEntries();
-
-        // insert entries to time series
-        for (SleepEntry entry : entries) {
-            LocalDate date = entry.getDate();
-            this.timeSeries[0].insert(date, entry.getBedTime());
-            this.timeSeries[1].insert(date, entry.getSleepDuration());
-            this.timeSeries[2].insert(date, entry.getRestRating());
-        }
+        updateEntries(entries);
 
         // print series
         System.out.println("Series: " + this.timeSeries[0].getName());
@@ -60,14 +45,38 @@ class ChartPanel extends JPanel {
         this.add(titleAndLegend);
 
         // add timeseries panel
-        this.add(new TimeSeriesPanel(this.timeSeries));
+        this.timeSeriesPanel = new TimeSeriesPanel(this.timeSeries);
+        this.add(this.timeSeriesPanel);
 
 
+    }
+
+    public void updateEntries(ArrayList<SleepEntry> entries) {
+        this.timeSeries = new TimeSeries[3];
+        this.timeSeries[0] = new TimeSeries<LocalTime>("Bedtime", Constants.bedtimeColor);
+        this.timeSeries[1] = new TimeSeries<LocalTime>("Sleep duration", Constants.sleepDurationColor);
+        this.timeSeries[2] = new TimeSeries<Integer>("Rest rating", Constants.restRatingColor);
+
+        // insert entries to time series
+        for (SleepEntry entry : entries) {
+            LocalDate date = entry.getDate();
+            this.timeSeries[0].insert(date, entry.getBedTime());
+            this.timeSeries[1].insert(date, entry.getSleepDuration());
+            this.timeSeries[2].insert(date, entry.getRestRating());
+        }
     }
 
     // This paints a legend, an x-axis (dates) and a y-axis with three series (rest rating, sleep duration and )
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+    }
+
+
+    @Override
+    public void entryAdded(ArrayList<SleepEntry> entries) {
+        updateEntries(entries);
+        this.timeSeriesPanel.setTimeSeries(this.timeSeries);
+        System.out.println("New entry added");
     }
 }

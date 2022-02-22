@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -8,9 +9,11 @@ import java.awt.event.ActionListener;
 
 public class NewEntryPanel extends JPanel {
     private Database db;
+    private ArrayList<NewEntryListener> newEntryListeners;
 
     public NewEntryPanel(Database db) {
         this.db = db;
+        this.newEntryListeners = new ArrayList<NewEntryListener>();
 
         // add textfields for date, bedtime, wakeup time and rest rating
         JLabel dateLabel = new JLabel("Date: ");
@@ -78,6 +81,11 @@ public class NewEntryPanel extends JPanel {
                                         wakeupField.setText("");
                                         restField.setText("");
                                     }
+                                } finally {
+                                    // notify listeners
+                                    for (NewEntryListener listener : newEntryListeners) {
+                                        listener.entryAdded(db.getEntries());
+                                    }
                                 }
 
                             } catch (NumberFormatException ex) {
@@ -93,14 +101,14 @@ public class NewEntryPanel extends JPanel {
                     JOptionPane.showMessageDialog(null, "Date must be in the format YYYY-MM-DD");
                 }
 
-                // print
-
-                // add to database
-                // SleepEntry entry = new SleepEntry(date, bedtime, wakeup, rating);
             }
         });
         this.add(addButton);
 
+    }
+
+    public void addNewEntryListener(NewEntryListener listener) {
+        newEntryListeners.add(listener);
     }
 
 }
