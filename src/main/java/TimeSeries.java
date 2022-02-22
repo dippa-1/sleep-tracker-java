@@ -1,15 +1,18 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.awt.Color;
 
 public class TimeSeries<T extends Comparable<T>> {
   private String name;
   private ArrayList<LocalDate> dates;
   private ArrayList<T> values;
+  private Color color;
 
-  public TimeSeries(String name) {
+  public TimeSeries(String name, Color color) {
     this.name = name;
     this.dates = new ArrayList<LocalDate>();
     this.values = new ArrayList<T>();
+    this.color = color;
   }
 
   public String getName() {
@@ -30,6 +33,10 @@ public class TimeSeries<T extends Comparable<T>> {
 
   public LocalDate getEndDate() {
     return this.dates.get(this.dates.size() - 1);
+  }
+
+  public Color getColor() {
+    return this.color;
   }
 
   public T getMaximum() {

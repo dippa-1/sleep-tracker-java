@@ -15,9 +15,9 @@ class ChartPanel extends JPanel {
         // this.db = db;
 
         this.timeSeries = new TimeSeries[3];
-        this.timeSeries[0] = new TimeSeries<LocalTime>("Bedtime");
-        this.timeSeries[1] = new TimeSeries<LocalTime>("Sleep duration");
-        this.timeSeries[2] = new TimeSeries<Integer>("Rest rating");
+        this.timeSeries[0] = new TimeSeries<LocalTime>("Bedtime", Color.BLUE);
+        this.timeSeries[1] = new TimeSeries<LocalTime>("Sleep duration", Color.RED);
+        this.timeSeries[2] = new TimeSeries<Integer>("Rest rating", Color.GREEN);
 
         // get entries
         // ArrayList<SleepEntry> entries = db.getEntries();
