@@ -1,10 +1,16 @@
-import java.awt.*;
+package de.dhbw.charts;
+import java.awt.BasicStroke;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import javax.swing.JPanel;
+
+import de.dhbw.sleepTracker.core.Constants;
 
 public class TimeSeriesPanel extends JPanel {
   private TimeSeries[] timeSeries;
@@ -61,11 +67,11 @@ public class TimeSeriesPanel extends JPanel {
     }
 
     // x-axis ticks with date labels
-    LocalDateTime startDate = LocalDateTime.of(this.timeSeries[0].getStartDate(), LocalTime.MIN);
-    LocalDateTime endDate = LocalDateTime.of(this.timeSeries[0].getEndDate(), LocalTime.MIN);
+    LocalDateTime startDate = this.timeSeries[0].getFirstLabel();
+    LocalDateTime endDate = this.timeSeries[0].getLastLabel();
     Duration timeDiff = Duration.between(startDate, endDate);
     for (int i = 0; i < numTicksDateAxis; ++i) {
-      LocalDate date = this.timeSeries[0].getStartDate().plusDays(i * timeDiff.toDays() / (numTicksDateAxis - 1));
+      LocalDateTime date = this.timeSeries[0].getFirstLabel().plusDays(i * timeDiff.toDays() / (numTicksDateAxis - 1));
       int x = pl + usableWidth * i / (numTicksDateAxis - 1);
       g2.fillRect(x, height - pb, axisWidth, axisWidth*4);
 
@@ -125,8 +131,8 @@ public class TimeSeriesPanel extends JPanel {
     g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
     int previousX = pl;
     int previousY = progressToPixel(pt, pt + usableHeight, (double) (maxRating - (int) this.timeSeries[2].getValues().get(0)) / (maxRating - minRating));
-    for (int i = 1; i < this.timeSeries[2].getDates().size(); ++i) {
-      final double xProgress = (double) i / (this.timeSeries[2].getDates().size() - 1);
+    for (int i = 1; i < this.timeSeries[2].getLabels().size(); ++i) {
+      final double xProgress = (double) i / (this.timeSeries[2].getLabels().size() - 1);
       int x = progressToPixel(pl, pl + usableWidth, xProgress);
 
       final double yProgress = (double) (maxRating - (int) this.timeSeries[2].getValues().get(i)) / (maxRating - minRating);
@@ -144,8 +150,8 @@ public class TimeSeriesPanel extends JPanel {
     LocalTime time = (LocalTime) this.timeSeries[0].getValues().get(0);
     double hourMinute = time.getHour() + time.getMinute() / 60.0;
     previousY = progressToPixel(pt, pt + usableHeight, (maxHour - hourMinute) / (maxHour - minHour));
-    for (int i = 1; i < this.timeSeries[0].getDates().size(); ++i) {
-      int x = pl + usableWidth * i / (this.timeSeries[0].getDates().size() - 1);
+    for (int i = 1; i < this.timeSeries[0].getLabels().size(); ++i) {
+      int x = pl + usableWidth * i / (this.timeSeries[0].getLabels().size() - 1);
       time = (LocalTime) this.timeSeries[0].getValues().get(i);
       hourMinute = time.getHour() + time.getMinute() / 60.0;
       int y = progressToPixel(pt, pt + usableHeight, (maxHour - hourMinute) / (maxHour - minHour));
@@ -161,8 +167,8 @@ public class TimeSeriesPanel extends JPanel {
     time = (LocalTime) this.timeSeries[1].getValues().get(0);
     hourMinute = time.getHour() + time.getMinute() / 60.0;
     previousY = progressToPixel(pt, pt + usableHeight, (maxHourDuration - hourMinute) / (maxHourDuration - minHourDuration));
-    for (int i = 1; i < this.timeSeries[1].getDates().size(); ++i) {
-      int x = pl + usableWidth * i / (this.timeSeries[1].getDates().size() - 1);
+    for (int i = 1; i < this.timeSeries[1].getLabels().size(); ++i) {
+      int x = pl + usableWidth * i / (this.timeSeries[1].getLabels().size() - 1);
       time = (LocalTime) this.timeSeries[1].getValues().get(i);
       hourMinute = time.getHour() + time.getMinute() / 60.0;
       int y = progressToPixel(pt, pt + usableHeight, (maxHourDuration - hourMinute) / (maxHourDuration - minHourDuration));

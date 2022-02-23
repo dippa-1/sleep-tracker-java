@@ -1,3 +1,4 @@
+package de.dhbw.charts;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -7,7 +8,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-class ChartPanel extends JPanel implements NewEntryListener {
+import de.dhbw.sleepTracker.core.Constants;
+import de.dhbw.sleepTracker.core.SleepEntry;
+import de.dhbw.sleepTracker.gui.NewEntryListener;
+
+public class ChartPanel extends JPanel implements NewEntryListener {
     private TimeSeries[] timeSeries;
     private TimeSeriesPanel timeSeriesPanel;
 
@@ -17,7 +22,7 @@ class ChartPanel extends JPanel implements NewEntryListener {
 
         // print series
         System.out.println("Series: " + this.timeSeries[0].getName());
-        for (LocalDate date : (ArrayList<LocalDate>) this.timeSeries[0].getDates()) {
+        for (LocalDate date : (ArrayList<LocalDate>) this.timeSeries[0].getLabels()) {
             System.out.println(date);
         }
         for (LocalTime bedtime : (ArrayList<LocalTime>) this.timeSeries[0].getValues()) {

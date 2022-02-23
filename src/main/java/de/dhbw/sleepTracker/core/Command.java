@@ -1,3 +1,4 @@
+package de.dhbw.sleepTracker.core;
 import java.util.HashMap;
 import java.util.Map;
 

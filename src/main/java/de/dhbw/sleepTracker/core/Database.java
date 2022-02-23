@@ -1,3 +1,4 @@
+package de.dhbw.sleepTracker.core;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -10,7 +11,7 @@ public class Database {
   private String filepath;
   private ArrayList<SleepEntry> entries;
 
-  Database(String filepath) {
+  public Database(String filepath) {
     this.filepath = filepath;
     this.load();
   }

@@ -1,8 +1,12 @@
+package de.dhbw.sleepTracker.gui;
 import java.awt.Dimension;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import de.dhbw.charts.ChartPanel;
+import de.dhbw.sleepTracker.core.Database;
 
 public class GUI extends JFrame {
     public static void main(String[] args) {

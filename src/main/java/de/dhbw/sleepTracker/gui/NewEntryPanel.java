@@ -1,8 +1,13 @@
+package de.dhbw.sleepTracker.gui;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
 import javax.swing.*;
+
+import de.dhbw.sleepTracker.core.Database;
+import de.dhbw.sleepTracker.core.SleepEntry;
+import de.dhbw.sleepTracker.core.SleepEntryAlreadyExistsException;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
