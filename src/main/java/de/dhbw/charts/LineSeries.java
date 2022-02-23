@@ -1,11 +1,11 @@
 package de.dhbw.charts;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class LineSeries<X extends Comparable<X>, Y extends Comparable<Y>> extends Series {
-    protected ArrayList<X> labels;
-    protected ArrayList<Y> values;
+    private ArrayList<X> labels;
+    private ArrayList<Y> values;
 
     public LineSeries(String name, Color color) {
         super(name, color);
@@ -58,5 +58,15 @@ public class LineSeries<X extends Comparable<X>, Y extends Comparable<Y>> extend
         this.labels.add(i, label);
         this.values.add(i, value);
     }
-    
+
+    public void setLabels(ArrayList<X> labels) {
+        this.labels = labels;
+    }
+
+    public void setValues(ArrayList<Y> values) {
+        this.values = values;
+    }
+
+    public void paintLine(Graphics g, Rectangle bounds) {}
+
 }

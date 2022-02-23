@@ -12,10 +12,10 @@ import javax.swing.JPanel;
 
 import de.dhbw.sleepTracker.core.Constants;
 
-public class TimeSeriesPanel extends JPanel {
+public class _TimeSeriesPanel extends JPanel {
   private TimeSeries[] timeSeries;
 
-  public TimeSeriesPanel(TimeSeries[] timeSeries) {
+  public _TimeSeriesPanel(TimeSeries[] timeSeries) {
     this.timeSeries = timeSeries;
   }
 

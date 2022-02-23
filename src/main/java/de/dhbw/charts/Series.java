@@ -18,4 +18,12 @@ public class Series {
     public Color getColor() {
         return this.color;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
 }
