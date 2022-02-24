@@ -2,10 +2,8 @@ package de.dhbw.charts;
 
 import javax.swing.JPanel;
 
-import de.dhbw.sleepTracker.gui.NewEntryListener;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class ChartPanel extends JPanel {
     private String title;

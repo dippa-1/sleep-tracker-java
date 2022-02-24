@@ -1,5 +1,6 @@
 package de.dhbw.charts;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
     g2d.setColor(getColor());
     g2d.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
+    // Draw graph lines based on the class of the values.
+    // This helps to provide a good solution for the different types of values.
     if (getValues().get(0).getClass() == Integer.class) {
       int maximum = (int) getMaximum();
       int minimum = (int) getMinimum();
@@ -62,12 +65,31 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
         previousY = y;
       }
     } 
-    // else if (getValues().get(0).getClass() == LocalTime.class) {
-    //   LocalTime maximum = (LocalTime) getMaximum();
-    //   LocalTime minimum = (LocalTime) getMinimum();
-    //   int previousX = bounds.x;
-    //   int previousY = bounds.y + bounds.height - (int)(((LocalTime) getValues().get(0) - minimum).toNanoOfDay() * bounds.height / (maximum.toNanoOfDay() - minimum.toNanoOfDay()));
+    else if (getValues().get(0).getClass() == LocalTime.class) {
+      final LocalTime maximum = (LocalTime) getMaximum();
+      final long maximumMinutes = maximum.getMinute() + maximum.getHour() * 60;
+      final LocalTime minimum = (LocalTime) getMinimum();
+      final long minimumMinutes = minimum.getMinute() + minimum.getHour() * 60;
+      long minutesRange = maximumMinutes - minimumMinutes;
+      if (minutesRange < 0) {
+        minutesRange += 24 * 60;
+      }
 
+      int previousX = bounds.x;
+      LocalTime element = (LocalTime) getValues().get(0);
+      long elementMinutes = element.getMinute() + element.getHour() * 60;
+      int previousY = bounds.y + bounds.height - (int)((elementMinutes - minimumMinutes) * bounds.height / minutesRange);
+      for (int i = 1; i < getValues().size(); ++i) {
+        element = (LocalTime) getValues().get(i);
+        elementMinutes = element.getMinute() + element.getHour() * 60;
+        int x = bounds.x + i * bounds.width / getValues().size();
+        int y = bounds.y + bounds.height - (int)((elementMinutes - minimumMinutes) * bounds.height / minutesRange);
+        g2d.drawLine(previousX, previousY, x, y);
+        previousX = x;
+        previousY = y;
+      }
+
+    }
 
   }
 
