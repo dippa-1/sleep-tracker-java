@@ -69,4 +69,8 @@ public class LineSeries<X extends Comparable<X>, Y extends Comparable<Y>> extend
 
     public void paintLine(Graphics g, Rectangle bounds) {}
 
+    public void paintXAxisTicks(Graphics g, Rectangle bounds, int tickCount, int tickSize) {}
+
+    public void paintYAxisTicks(Graphics g, Rectangle bounds, int tickSize, int xLabelOffset) {}
+
 }

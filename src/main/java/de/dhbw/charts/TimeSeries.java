@@ -94,4 +94,81 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
   }
 
 
+  @Override
+  public void paintXAxisTicks(Graphics g, Rectangle bounds, int tickCount, int tickSize) {
+      super.paintXAxisTicks(g, bounds, tickCount, tickSize);
+
+      final int estimatedWidthPerMonthLabel = 40; // to kind of center date labels
+
+      Graphics2D g2d = (Graphics2D) g;
+        LocalDateTime startDate = (LocalDateTime) getFirstLabel();
+        LocalDateTime endDate = (LocalDateTime) getLastLabel();
+        Duration timeDiff = Duration.between(startDate, endDate);
+        for (int i = 0; i < tickCount; ++i) {
+            LocalDateTime date = ((LocalDateTime)getFirstLabel())
+                    .plusDays(i * timeDiff.toDays() / (tickCount - 1));
+            int x = bounds.x + bounds.width * i / (tickCount - 1);
+            g2d.fillRect(x, bounds.y + bounds.height, tickSize, tickSize * 4);
+
+            final int displayYear = date.getYear() % 2000;
+            final String displayMonth = date.getMonth().toString().substring(0, 3);
+            g2d.drawString(displayMonth + " " + displayYear, x - estimatedWidthPerMonthLabel / 2, bounds.height + bounds.y + 20);
+        }
+  }
+
+  @Override
+  public void paintYAxisTicks(Graphics g, Rectangle bounds, int tickSize, int xLabelOffset) {
+      super.paintYAxisTicks(g, bounds, tickSize, xLabelOffset);
+
+      Graphics2D g2d = (Graphics2D) g;
+      final int yLabelOffset = 5;
+
+      if (getValues().get(0).getClass() == Integer.class) {
+        final int minimum = (int) getMinimum();
+        final int maximum = (int) getMaximum();
+
+        // one tick for every number in reversed order
+        g2d.setColor(getColor());
+        for (int i = maximum; i >= minimum; --i) {
+            int y = bounds.y + bounds.height * (maximum - i) / (maximum - minimum);
+
+            g2d.fillRect(bounds.x - tickSize * 4, y, tickSize * 4, tickSize);
+            g2d.drawString(Integer.toString(i), bounds.x - xLabelOffset, y + yLabelOffset);
+        }
+      } else if (getValues().get(0).getClass() == Float.class) {
+
+        final float minimum = (float) getMinimum();
+        final int minimumInt = (int) Math.floor(minimum);
+        final float maximum = (float) getMaximum();
+        final int maximumInt = (int) Math.floor(maximum + 1f);
+        System.out.println(minimum + " " + maximum);
+        System.out.println(minimumInt + " " + maximumInt);
+        // one tick for every hour with the maximum being at the top
+        g2d.setColor(getColor());
+        for (int i = maximumInt; i >= minimumInt; --i) {
+            int y = bounds.y + bounds.height * (maximumInt - i) / (maximumInt - minimumInt);
+
+            g2d.fillRect(bounds.x - tickSize * 4, y, tickSize * 4, tickSize);
+            g2d.drawString(Integer.toString(i % 24) + " h", bounds.x - xLabelOffset, y + yLabelOffset);
+        }
+      } else if (getValues().get(0).getClass() == LocalTime.class) {
+        final LocalTime minBedtime = (LocalTime) getMinimum();
+        final int minHour = minBedtime.getHour();
+        final LocalTime maxBedtime = (LocalTime) getMaximum();
+        final int maxHour = maxBedtime.getHour() + 1;
+        System.out.println(minBedtime + " " + maxBedtime);
+        System.out.println(minHour + " " + maxHour);
+        // one tick for every hour with the maximum being at the top
+        g2d.setColor(getColor());
+        for (int i = maxHour; i >= minHour; --i) {
+            int y = bounds.y + bounds.height * (maxHour - i) / (maxHour - minHour);
+
+            g2d.fillRect(bounds.x - tickSize * 4, y, tickSize * 4, tickSize);
+            g2d.drawString(Integer.toString(i % 24) + ":00", bounds.x - xLabelOffset, y + yLabelOffset);
+        }
+      }
+
+  }
+
+
 }

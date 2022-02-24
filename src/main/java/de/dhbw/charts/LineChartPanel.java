@@ -42,8 +42,6 @@ public class LineChartPanel extends ChartPanel {
         final int usableWidth = width - pl - pr;
         final int usableHeight = height - pt - pb;
         final int numTicksDateAxis = 10;
-        final int estimatedWidthPerMonthLabel = 40; // to kind of center date labels
-        final int yLabelOffset = 5;
         final int xRatingLabelOffset = 20;
         final int xBedtimeLabelOffset = 60;
         final int xDurationLabelOffset = 90;
@@ -56,74 +54,23 @@ public class LineChartPanel extends ChartPanel {
         g2.setColor(Constants.primaryColor);
         g2.fillRect(pl, pt, axisWidth, height - pt - pb);
 
-        // sadly, at this point, we have to use a fixed amount of time series because we
-        // already know the amount
-        if (this.series.length != 3) {
+        if (this.series.length == 0) {
             return;
         }
 
-
         // x-axis ticks with date labels
-        LocalDateTime startDate = (LocalDateTime) this.series[0].getFirstLabel();
-        LocalDateTime endDate = (LocalDateTime) this.series[0].getLastLabel();
-        Duration timeDiff = Duration.between(startDate, endDate);
-        for (int i = 0; i < numTicksDateAxis; ++i) {
-            LocalDateTime date = ((LocalDateTime)this.series[0].getFirstLabel())
-                    .plusDays(i * timeDiff.toDays() / (numTicksDateAxis - 1));
-            int x = pl + usableWidth * i / (numTicksDateAxis - 1);
-            g2.fillRect(x, height - pb, axisWidth, axisWidth * 4);
-
-            final int displayYear = date.getYear() % 2000;
-            final String displayMonth = date.getMonth().toString().substring(0, 3);
-            g2.drawString(displayMonth + " " + displayYear, x - estimatedWidthPerMonthLabel / 2, height - pb + 20);
-        }
-
+        // Warning: this assumes that the time series are sorted by date and that all series have the same dates
+        this.series[0].paintXAxisTicks(g, new Rectangle(pl, pt, usableWidth, usableHeight), numTicksDateAxis, axisWidth);
 
         // y-axis ticks for each time series
-        // rest rating
-        final int minRating = (int) this.series[2].getMinimum();
-        final int maxRating = (int) this.series[2].getMaximum();
-        // one tick for every number in reversed order
-        g2.setColor(this.series[2].getColor());
-        for (int i = maxRating; i >= minRating; --i) {
-            int y = pt + usableHeight * (maxRating - i) / (maxRating - minRating);
-
-            g2.fillRect(pl - axisWidth * 4, y, axisWidth * 4, axisWidth);
-            g2.drawString(Integer.toString(i), pl - xRatingLabelOffset, y + yLabelOffset);
-        }
-
-
         // bedtime with full hours only
-        final LocalTime minBedtime = (LocalTime) this.series[0].getMinimum();
-        final int minHour = minBedtime.getHour();
-        final LocalTime maxBedtime = (LocalTime) this.series[0].getMaximum();
-        final int maxHour = maxBedtime.getHour() + 1;
-        System.out.println(minBedtime + " " + maxBedtime);
-        System.out.println(minHour + " " + maxHour);
-        // one tick for every hour with the maximum being at the top
-        g2.setColor(this.series[0].getColor());
-        for (int i = maxHour; i >= minHour; --i) {
-            int y = pt + usableHeight * (maxHour - i) / (maxHour - minHour);
-
-            g2.fillRect(pl - axisWidth * 4, y, axisWidth * 4, axisWidth);
-            g2.drawString(Integer.toString(i % 24) + ":00", pl - xBedtimeLabelOffset, y + yLabelOffset);
-        }
+        this.series[0].paintYAxisTicks(g, new Rectangle(pl, pt, usableWidth, usableHeight), axisWidth, xBedtimeLabelOffset);
 
         // duration with full hours only
-        final float minDuration = (float) this.series[1].getMinimum();
-        final int minHourDuration = (int) Math.floor(minDuration);
-        final float maxDuration = (float) this.series[1].getMaximum();
-        final int maxHourDuration = (int) Math.floor(maxDuration + 1f);
-        System.out.println(minDuration + " " + maxDuration);
-        System.out.println(minHourDuration + " " + maxHourDuration);
-        // one tick for every hour with the maximum being at the top
-        g2.setColor(this.series[1].getColor());
-        for (int i = maxHourDuration; i >= minHourDuration; --i) {
-            int y = pt + usableHeight * (maxHourDuration - i) / (maxHourDuration - minHourDuration);
+        this.series[1].paintYAxisTicks(g, new Rectangle(pl, pt, usableWidth, usableHeight), axisWidth, xDurationLabelOffset);
 
-            g2.fillRect(pl - axisWidth * 4, y, axisWidth * 4, axisWidth);
-            g2.drawString(Integer.toString(i % 24) + " h", pl - xDurationLabelOffset, y + yLabelOffset);
-        }
+        // rest rating
+        this.series[2].paintYAxisTicks(g, new Rectangle(pl, pt, usableWidth, usableHeight), axisWidth, xRatingLabelOffset);
 
         // draw all series
         for (LineSeries s: series) {
