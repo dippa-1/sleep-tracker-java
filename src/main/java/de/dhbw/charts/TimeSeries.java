@@ -123,6 +123,7 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
       Graphics2D g2d = (Graphics2D) g;
       final int yLabelOffset = 5;
 
+      // draw different axis ticks and value labels for different types of values
       if (getValues().get(0).getClass() == Integer.class) {
         final int minimum = (int) getMinimum();
         final int maximum = (int) getMaximum();
@@ -152,19 +153,18 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
             g2d.drawString(Integer.toString(i % 24) + " h", bounds.x - xLabelOffset, y + yLabelOffset);
         }
       } else if (getValues().get(0).getClass() == LocalTime.class) {
-        final LocalTime minBedtime = (LocalTime) getMinimum();
-        final int minHour = minBedtime.getHour();
-        final LocalTime maxBedtime = (LocalTime) getMaximum();
-        final int maxHour = maxBedtime.getHour() + 1;
-        System.out.println(minBedtime + " " + maxBedtime);
-        System.out.println(minHour + " " + maxHour);
+        final LocalTime minTime = (LocalTime) getMinimum();
+        final int minHour = minTime.getHour(); // min time might actually be max time. TODO: fix this
+        final LocalTime maxTime = (LocalTime) getMaximum();
+        final int maxHour = maxTime.getHour() + 1;
+
         // one tick for every hour with the maximum being at the top
         g2d.setColor(getColor());
         for (int i = maxHour; i >= minHour; --i) {
             int y = bounds.y + bounds.height * (maxHour - i) / (maxHour - minHour);
 
             g2d.fillRect(bounds.x - tickSize * 4, y, tickSize * 4, tickSize);
-            g2d.drawString(Integer.toString(i % 24) + ":00", bounds.x - xLabelOffset, y + yLabelOffset);
+            g2d.drawString((i % 24) + ":00", bounds.x - xLabelOffset, y + yLabelOffset);
         }
       }
 
