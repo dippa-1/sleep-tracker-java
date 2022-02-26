@@ -2,8 +2,6 @@ package de.dhbw.charts;
 
 import java.awt.*;
 
-import de.dhbw.sleepTracker.core.Constants;
-
 public class LineChartPanel extends ChartPanel {
     private LineSeries[] series;
 
@@ -20,9 +18,7 @@ public class LineChartPanel extends ChartPanel {
 
         Graphics2D g2 = (Graphics2D) g;
         // anti-aliasing
-        g2.setRenderingHint(
-                RenderingHints.KEY_TEXT_ANTIALIASING,
-                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
         // padding
         final int pl = 100; // left
@@ -42,11 +38,11 @@ public class LineChartPanel extends ChartPanel {
         final int yLegendOffset = 10;
 
         // draw x-axis
-        g2.setColor(Constants.primaryColor);
+        g2.setColor(Color.BLACK);
         g2.fillRect(pl, height - pb, width - pl - pr, axisWidth);
 
         // draw y-axis
-        g2.setColor(Constants.primaryColor);
+        g2.setColor(Color.BLACK);
         g2.fillRect(pl, pt, axisWidth, height - pt - pb);
 
         if (this.series.length == 0) {
