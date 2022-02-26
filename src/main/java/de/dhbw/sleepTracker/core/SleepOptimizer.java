@@ -1,3 +1,4 @@
+package de.dhbw.sleepTracker.core;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -36,6 +37,7 @@ public class SleepOptimizer {
           SleepEntry entry = new SleepEntry(date, argParser.getBedTime(), argParser.getWakeupTime(), argParser.getRestRating());
           try {
             db.add(entry, false);
+            System.out.println("Input: " + entry);
           } catch (SleepEntryAlreadyExistsException e) {
             Scanner scanner = new Scanner(System.in);
             System.out.print("Entry already exists for " + entry.getDate() + ". Overwrite? [Y/n] ");
@@ -59,7 +61,7 @@ public class SleepOptimizer {
           printHelp();
           break;
         case STATS:
-          db.printStats();
+          System.out.println(db.getStats());
           break;
       }
     } catch (BedInputException e) {

@@ -1,8 +1,11 @@
+package de.dhbw.sleepTracker.core;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -10,13 +13,12 @@ public class Database {
   private String filepath;
   private ArrayList<SleepEntry> entries;
 
-  Database(String filepath) {
+  public Database(String filepath) {
     this.filepath = filepath;
     this.load();
   }
 
   public void add(SleepEntry entry, boolean overwrite) throws SleepEntryAlreadyExistsException {
-    System.out.println("Input: " + entry);
 
     for (int i = 0; i < entries.size(); ++i) {
         if (entry.getDate().equals(entries.get(i).getDate())) {
@@ -136,19 +138,19 @@ public class Database {
     return string.toString();
   }
 
-  public void printStats() {
+  public String getStats() {
     // print general entries stats. assumes that the entries are sorted by date
     int entriesSize = entries.size();
     if (entriesSize == 0) {
-      System.out.println("No entries");
-      return;
+      return "No entries";
     }
     LocalDate firstDate = entries.get(0).getDate();
     LocalDate lastDate = entries.get(entriesSize - 1).getDate();
-    System.out.format("%40s: %s\n", "First entry", firstDate);
-    System.out.format("%40s: %s\n", "Last entry", lastDate);
-    System.out.format("%40s: %d\n", "Total entries", entriesSize);
-    System.out.format("%40s: %d\n", "Total days", lastDate.getDayOfYear() - firstDate.getDayOfYear() + 1);
+    StringBuffer sb = new StringBuffer();
+    sb.append(String.format("%40s: %s\n", "First entry", firstDate));
+    sb.append(String.format("%40s: %s\n", "Last entry", lastDate));
+    sb.append(String.format("%40s: %d\n", "Number of entries", entriesSize));
+    sb.append(String.format("%40s: %d\n", "Number of days", Duration.between(LocalDateTime.of(firstDate, LocalTime.MIN), LocalDateTime.of(lastDate, LocalTime.MIN)).toDays()));
 
     // calculate mean bedtime
     LocalTime meanBedTime;
@@ -166,7 +168,7 @@ public class Database {
       meanBedTime = LocalTime.of(hours, minutes, seconds);
     }
     // print
-    System.out.format("%40s: %s\n", "Mean bedtime", meanBedTime);
+    sb.append(String.format("%40s: %s\n", "Mean bedtime", meanBedTime));
 
     // calculate mean wakeup time
     LocalTime meanWakeupTime;
@@ -184,7 +186,7 @@ public class Database {
       meanWakeupTime = LocalTime.of(hours, minutes, seconds);
     }
     // print
-    System.out.format("%40s: %s\n", "Mean wakeup time", meanWakeupTime);
+    sb.append(String.format("%40s: %s\n", "Mean wakeup time", meanWakeupTime));
 
     // calculate mean rest rating
     double meanRestRating;
@@ -198,7 +200,7 @@ public class Database {
       meanRestRating = totalRestRating / entriesSize;
     }
     // print
-    System.out.format("%40s: %.2f\n", "Mean rest rating", meanRestRating);
+    sb.append(String.format("%40s: %.2f\n", "Mean rest rating", meanRestRating));
 
     // calculate mean sleep duration
     LocalTime meanSleepDuration;
@@ -216,7 +218,7 @@ public class Database {
       meanSleepDuration = LocalTime.of(hours, minutes, seconds);
     }
     // print
-    System.out.format("%40s: %s\n", "Mean sleep duration", meanSleepDuration);
+    sb.append(String.format("%40s: %s\n", "Mean sleep duration", meanSleepDuration));
 
     // count the longest consecutive entries with a rating of 4 and above
     int longestConsecutive = 0;
@@ -235,7 +237,7 @@ public class Database {
       longestConsecutive = currentConsecutive;
     }
     // print
-    System.out.format("%40s: %d\n", "Longest awake streak (4 and better)", longestConsecutive);
+    sb.append(String.format("%40s: %d\n", "Longest awake streak (4 and better)", longestConsecutive));
 
     // count the longest consecutive entries with a rating of 2 and below
     longestConsecutive = 0;
@@ -254,7 +256,9 @@ public class Database {
       longestConsecutive = currentConsecutive;
     }
     // print
-    System.out.format("%40s: %d\n", "Longest slump (2 and below)", longestConsecutive);
+    sb.append(String.format("%40s: %d\n", "Longest slump (2 and below)", longestConsecutive));
+
+    return sb.toString();
   }
 
 }
