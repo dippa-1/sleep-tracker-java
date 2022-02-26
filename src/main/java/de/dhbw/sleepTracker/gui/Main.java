@@ -10,9 +10,9 @@ import de.dhbw.charts.LineChartPanel;
 import de.dhbw.charts.TimeSeries;
 import de.dhbw.sleepTracker.core.Database;
 
-public class GUI extends JFrame {
+public class Main extends JFrame {
     public static void main(String[] args) {
-        GUI gui = new GUI();
+        Main gui = new Main();
         Database db = new Database("sleep-data");
 
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
