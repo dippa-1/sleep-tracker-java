@@ -1,9 +1,6 @@
 package de.dhbw.charts;
 
 import java.awt.*;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 import de.dhbw.sleepTracker.core.Constants;
 
@@ -13,10 +10,6 @@ public class LineChartPanel extends ChartPanel {
     public LineChartPanel(String title, LineSeries[] series) {
         super(title);
         this.series = series;
-    }
-
-    private int progressToPixel(int start, int end, double progressPercent) {
-        return (int) (start + (end - start) * progressPercent);
     }
 
     @Override
@@ -61,13 +54,16 @@ public class LineChartPanel extends ChartPanel {
         }
 
         // x-axis ticks with date labels
-        // Warning: this assumes that the time series are sorted by date and that all series have the same dates
-        this.series[0].paintXAxisTicks(g, new Rectangle(pl, pt, usableWidth, usableHeight), numTicksDateAxis, axisWidth);
+        // Warning: this assumes that the time series are sorted by date and that all
+        // series have the same dates
+        this.series[0].paintXAxisTicks(g, new Rectangle(pl, pt, usableWidth, usableHeight), numTicksDateAxis,
+                axisWidth);
 
         // draw all axis, lines and legends
         for (int i = 0; i < this.series.length; ++i) {
-            this.series[i].paintLegend(g, xLegendOffset + xLegendOffsetIncrease*i, yLegendOffset);
-            this.series[i].paintYAxisTicks(g, new Rectangle(pl, pt, usableWidth, usableHeight), axisWidth, xLabelOffset + i * xLabelOffsetIncrease);
+            this.series[i].paintLegend(g, xLegendOffset + xLegendOffsetIncrease * i, yLegendOffset);
+            this.series[i].paintYAxisTicks(g, new Rectangle(pl, pt, usableWidth, usableHeight), axisWidth,
+                    xLabelOffset + i * xLabelOffsetIncrease);
             this.series[i].paintLine(g2, new Rectangle(pl + axisWidth, pt, usableWidth, usableHeight));
         }
 
@@ -79,5 +75,3 @@ public class LineChartPanel extends ChartPanel {
     }
 
 }
-
-
