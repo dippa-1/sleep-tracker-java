@@ -3,7 +3,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
 
@@ -148,7 +150,7 @@ public class Database {
     sb.append(String.format("%40s: %s\n", "First entry", firstDate) + '\n');
     sb.append(String.format("%40s: %s\n", "Last entry", lastDate) + '\n');
     sb.append(String.format("%40s: %d\n", "Number of entries", entriesSize) + '\n');
-    sb.append(String.format("%40s: %d\n", "Number of days", lastDate.getDayOfYear() - firstDate.getDayOfYear()) + '\n');
+    sb.append(String.format("%40s: %d\n", "Number of days", Duration.between(LocalDateTime.of(firstDate, LocalTime.MIN), LocalDateTime.of(lastDate, LocalTime.MIN)).toDays()) + '\n');
 
     // calculate mean bedtime
     LocalTime meanBedTime;
