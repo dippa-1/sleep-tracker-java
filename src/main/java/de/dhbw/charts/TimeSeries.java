@@ -64,8 +64,8 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
         previousY = y;
       }
     } else if (getValues().get(0).getClass() == Float.class) {
-      float maximum = (float) getMaximum();
-      float minimum = (float) getMinimum();
+      float maximum = (float)Math.floor((float)getMaximum())+1f;
+      float minimum = (float) Math.floor((float)getMinimum());
       int previousX = bounds.x;
       int previousY = bounds.y + bounds.height
           - (int) (((float) getValues().get(0) - minimum) * bounds.height / (maximum - minimum));
