@@ -56,8 +56,14 @@ public class NewEntryPanel extends JPanel {
                 try {
                     LocalDate date = LocalDate.parse(dateString);
                     try {
+                        if (bedtimeString.length() == 4) {
+                            bedtimeString = "0" + bedtimeString;
+                        }
                         LocalTime bedtime = LocalTime.parse(bedtimeString);
                         try {
+                            if (wakeupString.length() == 4) {
+                                wakeupString = "0" + wakeupString;
+                            }
                             LocalTime wakeup = LocalTime.parse(wakeupString);
                             try {
                                 int rest = Integer.parseInt(restString);
