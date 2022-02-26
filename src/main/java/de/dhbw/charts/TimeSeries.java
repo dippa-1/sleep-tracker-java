@@ -28,6 +28,10 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
     return (ArrayList<LocalDateTime>) super.getLabels();
   }
 
+  private double calculateXProgress(LocalDateTime startDate, Duration totalDuration, LocalDateTime currentDate) {
+    return Duration.between(startDate, currentDate).toMillis() / (double)totalDuration.toMillis();
+  }
+
   @Override
   public void paintLine(Graphics g, Rectangle bounds) {
     super.paintLine(g, bounds);
@@ -39,6 +43,10 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
     g2d.setColor(getColor());
     g2d.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
+    final LocalDateTime startDate = getFirstLabel();
+    final LocalDateTime endDate = getLastLabel();
+    final Duration totalDuration = Duration.between(startDate, endDate);
+
     // Draw graph lines based on the class of the values.
     // This helps to provide a good solution for the different types of values.
     if (getValues().get(0).getClass() == Integer.class) {
@@ -47,7 +55,8 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
       int previousX = bounds.x;
       int previousY = bounds.y + bounds.height - ((int) getValues().get(0) - minimum) * bounds.height / (maximum - minimum);
       for (int i = 1; i < getValues().size(); ++i) {
-        int x = bounds.x + i * bounds.width / getValues().size();
+        final double xProgress = calculateXProgress(startDate, totalDuration, getLabels().get(i));
+        int x = (int) (bounds.x + xProgress * bounds.width);
         int y = bounds.y + bounds.height - ((int) getValues().get(i) - minimum) * bounds.height / (maximum - minimum);
         g2d.drawLine(previousX, previousY, x, y);
         previousX = x;
@@ -59,7 +68,8 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
       int previousX = bounds.x;
       int previousY = bounds.y + bounds.height - (int)(((float) getValues().get(0) - minimum) * bounds.height / (maximum - minimum));
       for (int i = 1; i < getValues().size(); ++i) {
-        int x = bounds.x + i * bounds.width / getValues().size();
+        final double xProgress = calculateXProgress(startDate, totalDuration, getLabels().get(i));
+        int x = (int) (bounds.x + xProgress * bounds.width);
         int y = bounds.y + bounds.height - (int)(((float) getValues().get(i) - minimum) * bounds.height / (maximum - minimum));
         g2d.drawLine(previousX, previousY, x, y);
         previousX = x;
@@ -83,7 +93,8 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
       for (int i = 1; i < getValues().size(); ++i) {
         element = (LocalTime) getValues().get(i);
         elementMinutes = element.getMinute() + element.getHour() * 60;
-        int x = bounds.x + i * bounds.width / getValues().size();
+        final double xProgress = calculateXProgress(startDate, totalDuration, getLabels().get(i));
+        int x = (int) (bounds.x + xProgress * bounds.width);
         int y = bounds.y + bounds.height - (int)((elementMinutes - minimumMinutes) * bounds.height / minutesRange);
         g2d.drawLine(previousX, previousY, x, y);
         previousX = x;
