@@ -20,7 +20,7 @@ public class ChartDataManager implements NewEntryListener {
         this.chartPanel = chartPanel;
         bedtimes = new TimeSeries<LocalTime>("Bedtime", new Color(0xef, 0x44, 0x44));
         durations = new TimeSeries<Float>("Duration", new Color(0x22, 0xc5, 0x5e));
-        ratings = new TimeSeries<Integer>("Rating", new Color(0x06, 0xb6, 0xd4));
+        ratings = new TimeSeries<Integer>("Rating", new Color(0x63, 0x66, 0xf1));
         entryAdded(entries);
     }
 
