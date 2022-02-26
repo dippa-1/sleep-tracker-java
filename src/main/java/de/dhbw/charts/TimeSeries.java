@@ -35,7 +35,7 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
   @Override
   public void paintLine(Graphics g, Rectangle bounds) {
     super.paintLine(g, bounds);
-    if (getValues().size() == 0) {
+    if (getValues().size() < 2 || getLabels().size() < 2) {
       return;
     }
 
@@ -110,6 +110,10 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
   public void paintXAxisTicks(Graphics g, Rectangle bounds, int tickCount, int tickSize) {
       super.paintXAxisTicks(g, bounds, tickCount, tickSize);
 
+      if (getLabels().size() < 2) {
+          return;
+      }
+
       final int estimatedWidthPerMonthLabel = 40; // to kind of center date labels
 
       Graphics2D g2d = (Graphics2D) g;
@@ -131,6 +135,10 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
   @Override
   public void paintYAxisTicks(Graphics g, Rectangle bounds, int tickSize, int xLabelOffset) {
       super.paintYAxisTicks(g, bounds, tickSize, xLabelOffset);
+
+      if (getLabels().size() < 2) {
+          return;
+      }
 
       Graphics2D g2d = (Graphics2D) g;
       final int yLabelOffset = 5;
