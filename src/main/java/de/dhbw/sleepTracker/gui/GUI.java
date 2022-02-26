@@ -17,7 +17,9 @@ public class GUI extends JFrame {
 
         gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gui.setTitle("Sleep Optimizer");
-        gui.setBounds(280, 120, 800, 600);
+        final int width = 1200;
+        final int height = 700;
+        gui.setBounds(50, 50, width, height);
 
         // add parent container for horizontal layout
         JPanel container = new JPanel();

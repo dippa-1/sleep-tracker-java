@@ -61,7 +61,7 @@ public class SleepOptimizer {
           printHelp();
           break;
         case STATS:
-          db.printStats();
+          System.out.println(db.getStats());
           break;
       }
     } catch (BedInputException e) {

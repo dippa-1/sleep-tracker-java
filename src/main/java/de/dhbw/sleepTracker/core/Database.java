@@ -136,19 +136,19 @@ public class Database {
     return string.toString();
   }
 
-  public void printStats() {
+  public String getStats() {
     // print general entries stats. assumes that the entries are sorted by date
     int entriesSize = entries.size();
     if (entriesSize == 0) {
-      System.out.println("No entries");
-      return;
+      return "No entries";
     }
     LocalDate firstDate = entries.get(0).getDate();
     LocalDate lastDate = entries.get(entriesSize - 1).getDate();
-    System.out.format("%40s: %s\n", "First entry", firstDate);
-    System.out.format("%40s: %s\n", "Last entry", lastDate);
-    System.out.format("%40s: %d\n", "Total entries", entriesSize);
-    System.out.format("%40s: %d\n", "Total days", lastDate.getDayOfYear() - firstDate.getDayOfYear() + 1);
+    StringBuffer sb = new StringBuffer();
+    sb.append(String.format("%40s: %s\n", "First entry", firstDate) + '\n');
+    sb.append(String.format("%40s: %s\n", "Last entry", lastDate) + '\n');
+    sb.append(String.format("%40s: %d\n", "Number of entries", entriesSize) + '\n');
+    sb.append(String.format("%40s: %d\n", "Number of days", lastDate.getDayOfYear() - firstDate.getDayOfYear()) + '\n');
 
     // calculate mean bedtime
     LocalTime meanBedTime;
@@ -166,7 +166,7 @@ public class Database {
       meanBedTime = LocalTime.of(hours, minutes, seconds);
     }
     // print
-    System.out.format("%40s: %s\n", "Mean bedtime", meanBedTime);
+    sb.append(String.format("%40s: %s\n", "Mean bedtime", meanBedTime) + '\n');
 
     // calculate mean wakeup time
     LocalTime meanWakeupTime;
@@ -184,7 +184,7 @@ public class Database {
       meanWakeupTime = LocalTime.of(hours, minutes, seconds);
     }
     // print
-    System.out.format("%40s: %s\n", "Mean wakeup time", meanWakeupTime);
+    sb.append(String.format("%40s: %s\n", "Mean wakeup time", meanWakeupTime) + '\n');
 
     // calculate mean rest rating
     double meanRestRating;
@@ -198,7 +198,7 @@ public class Database {
       meanRestRating = totalRestRating / entriesSize;
     }
     // print
-    System.out.format("%40s: %.2f\n", "Mean rest rating", meanRestRating);
+    sb.append(String.format("%40s: %.2f\n", "Mean rest rating", meanRestRating) + '\n');
 
     // calculate mean sleep duration
     LocalTime meanSleepDuration;
@@ -216,7 +216,7 @@ public class Database {
       meanSleepDuration = LocalTime.of(hours, minutes, seconds);
     }
     // print
-    System.out.format("%40s: %s\n", "Mean sleep duration", meanSleepDuration);
+    sb.append(String.format("%40s: %s\n", "Mean sleep duration", meanSleepDuration) + '\n');
 
     // count the longest consecutive entries with a rating of 4 and above
     int longestConsecutive = 0;
@@ -235,7 +235,7 @@ public class Database {
       longestConsecutive = currentConsecutive;
     }
     // print
-    System.out.format("%40s: %d\n", "Longest awake streak (4 and better)", longestConsecutive);
+    sb.append(String.format("%40s: %d\n", "Longest awake streak (4 and better)", longestConsecutive) + '\n');
 
     // count the longest consecutive entries with a rating of 2 and below
     longestConsecutive = 0;
@@ -254,7 +254,9 @@ public class Database {
       longestConsecutive = currentConsecutive;
     }
     // print
-    System.out.format("%40s: %d\n", "Longest slump (2 and below)", longestConsecutive);
+    sb.append(String.format("%40s: %d\n", "Longest slump (2 and below)", longestConsecutive));
+
+    return sb.toString();
   }
 
 }

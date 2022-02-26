@@ -43,6 +43,7 @@ public class NewEntryPanel extends JPanel {
 
         // add "add" button
         JButton addButton = new JButton("Add");
+
         // listener
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -116,6 +117,16 @@ public class NewEntryPanel extends JPanel {
         });
         this.add(addButton);
 
+        // add a button to show stats in a popup
+        JButton showStatsButton = new JButton("Show Stats");
+        showStatsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, db.getStats());
+            }
+        });
+        System.out.println("hello?");
+        this.add(showStatsButton);
     }
 
     public void addNewEntryListener(NewEntryListener listener) {
