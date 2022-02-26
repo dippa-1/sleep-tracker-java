@@ -3,7 +3,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class SleepOptimizer {
+public class Main {
   public static void main(String[] args) throws Exception {
     if (args.length == 0) {
       printHelp();

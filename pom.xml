@@ -13,4 +13,17 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+
+
+    <dependencies>
+    
+
+        <dependency>
+            <groupId>maven</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>1.8.1.javadoc</version>
+            <type>N/A</type>
+        </dependency>
+
+    </dependencies>
 </project>
