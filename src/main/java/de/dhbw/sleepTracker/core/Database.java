@@ -147,10 +147,10 @@ public class Database {
     LocalDate firstDate = entries.get(0).getDate();
     LocalDate lastDate = entries.get(entriesSize - 1).getDate();
     StringBuffer sb = new StringBuffer();
-    sb.append(String.format("%40s: %s\n", "First entry", firstDate) + '\n');
-    sb.append(String.format("%40s: %s\n", "Last entry", lastDate) + '\n');
-    sb.append(String.format("%40s: %d\n", "Number of entries", entriesSize) + '\n');
-    sb.append(String.format("%40s: %d\n", "Number of days", Duration.between(LocalDateTime.of(firstDate, LocalTime.MIN), LocalDateTime.of(lastDate, LocalTime.MIN)).toDays()) + '\n');
+    sb.append(String.format("%40s: %s\n", "First entry", firstDate));
+    sb.append(String.format("%40s: %s\n", "Last entry", lastDate));
+    sb.append(String.format("%40s: %d\n", "Number of entries", entriesSize));
+    sb.append(String.format("%40s: %d\n", "Number of days", Duration.between(LocalDateTime.of(firstDate, LocalTime.MIN), LocalDateTime.of(lastDate, LocalTime.MIN)).toDays()));
 
     // calculate mean bedtime
     LocalTime meanBedTime;
@@ -168,7 +168,7 @@ public class Database {
       meanBedTime = LocalTime.of(hours, minutes, seconds);
     }
     // print
-    sb.append(String.format("%40s: %s\n", "Mean bedtime", meanBedTime) + '\n');
+    sb.append(String.format("%40s: %s\n", "Mean bedtime", meanBedTime));
 
     // calculate mean wakeup time
     LocalTime meanWakeupTime;
@@ -186,7 +186,7 @@ public class Database {
       meanWakeupTime = LocalTime.of(hours, minutes, seconds);
     }
     // print
-    sb.append(String.format("%40s: %s\n", "Mean wakeup time", meanWakeupTime) + '\n');
+    sb.append(String.format("%40s: %s\n", "Mean wakeup time", meanWakeupTime));
 
     // calculate mean rest rating
     double meanRestRating;
@@ -200,7 +200,7 @@ public class Database {
       meanRestRating = totalRestRating / entriesSize;
     }
     // print
-    sb.append(String.format("%40s: %.2f\n", "Mean rest rating", meanRestRating) + '\n');
+    sb.append(String.format("%40s: %.2f\n", "Mean rest rating", meanRestRating));
 
     // calculate mean sleep duration
     LocalTime meanSleepDuration;
@@ -218,7 +218,7 @@ public class Database {
       meanSleepDuration = LocalTime.of(hours, minutes, seconds);
     }
     // print
-    sb.append(String.format("%40s: %s\n", "Mean sleep duration", meanSleepDuration) + '\n');
+    sb.append(String.format("%40s: %s\n", "Mean sleep duration", meanSleepDuration));
 
     // count the longest consecutive entries with a rating of 4 and above
     int longestConsecutive = 0;
@@ -237,7 +237,7 @@ public class Database {
       longestConsecutive = currentConsecutive;
     }
     // print
-    sb.append(String.format("%40s: %d\n", "Longest awake streak (4 and better)", longestConsecutive) + '\n');
+    sb.append(String.format("%40s: %d\n", "Longest awake streak (4 and better)", longestConsecutive));
 
     // count the longest consecutive entries with a rating of 2 and below
     longestConsecutive = 0;

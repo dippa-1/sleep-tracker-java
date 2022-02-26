@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="SleepOptimizer CLI stats" type="Application" factoryName="Application">
+    <option name="MAIN_CLASS_NAME" value="de.dhbw.sleepTracker.core.SleepOptimizer" />
+    <module name="sleep-optimizer" />
+    <option name="PROGRAM_PARAMETERS" value="stats" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

@@ -125,7 +125,6 @@ public class NewEntryPanel extends JPanel {
                 JOptionPane.showMessageDialog(null, db.getStats());
             }
         });
-        System.out.println("hello?");
         this.add(showStatsButton);
     }
 
