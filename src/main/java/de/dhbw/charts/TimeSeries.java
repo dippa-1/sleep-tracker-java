@@ -30,6 +30,7 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
 
   @Override
   public void paintLine(Graphics g, Rectangle bounds) {
+    super.paintLine(g, bounds);
     if (getValues().size() == 0) {
       return;
     }
@@ -142,8 +143,6 @@ public class TimeSeries<Y extends Comparable<Y>> extends LineSeries {
         final int minimumInt = (int) Math.floor(minimum);
         final float maximum = (float) getMaximum();
         final int maximumInt = (int) Math.floor(maximum + 1f);
-        System.out.println(minimum + " " + maximum);
-        System.out.println(minimumInt + " " + maximumInt);
         // one tick for every hour with the maximum being at the top
         g2d.setColor(getColor());
         for (int i = maximumInt; i >= minimumInt; --i) {

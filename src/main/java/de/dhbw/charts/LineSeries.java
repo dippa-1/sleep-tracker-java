@@ -67,10 +67,24 @@ public class LineSeries<X extends Comparable<X>, Y extends Comparable<Y>> extend
         this.values = values;
     }
 
-    public void paintLine(Graphics g, Rectangle bounds) {}
+    public void paintLine(Graphics g, Rectangle bounds) {
+        // enable antialiasing
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    }
 
     public void paintXAxisTicks(Graphics g, Rectangle bounds, int tickCount, int tickSize) {}
 
     public void paintYAxisTicks(Graphics g, Rectangle bounds, int tickSize, int xLabelOffset) {}
+
+    public void paintLegend(Graphics g, int x, int y) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setColor(this.getColor());
+        g2d.fillRect(x, y, 10, 10);
+        g2d.setColor(Color.BLACK);
+        g2d.setFont(new Font("Arial", Font.PLAIN, 12));
+        g2d.drawString(this.getName(), x + 15, y + 10);
+    }
 
 }

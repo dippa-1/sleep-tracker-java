@@ -33,18 +33,20 @@ public class LineChartPanel extends ChartPanel {
 
         // padding
         final int pl = 100; // left
-        final int pr = 20; // right
-        final int pt = 20; // top
-        final int pb = 40; // bottom
+        final int pr = 30; // right
+        final int pt = 40; // top
+        final int pb = 30; // bottom
         final int axisWidth = 2;
         final int height = this.getHeight();
         final int width = this.getWidth();
         final int usableWidth = width - pl - pr;
         final int usableHeight = height - pt - pb;
         final int numTicksDateAxis = 10;
-        final int xRatingLabelOffset = 20;
-        final int xBedtimeLabelOffset = 60;
-        final int xDurationLabelOffset = 90;
+        final int xLabelOffset = 35;
+        final int xLabelOffsetIncrease = 25;
+        final int xLegendOffset = (getWidth() - (this.series.length - 1) * xLabelOffsetIncrease) / 2;
+        final int xLegendOffsetIncrease = 80;
+        final int yLegendOffset = 10;
 
         // draw x-axis
         g2.setColor(Constants.primaryColor);
@@ -62,19 +64,11 @@ public class LineChartPanel extends ChartPanel {
         // Warning: this assumes that the time series are sorted by date and that all series have the same dates
         this.series[0].paintXAxisTicks(g, new Rectangle(pl, pt, usableWidth, usableHeight), numTicksDateAxis, axisWidth);
 
-        // y-axis ticks for each time series
-        // bedtime with full hours only
-        this.series[0].paintYAxisTicks(g, new Rectangle(pl, pt, usableWidth, usableHeight), axisWidth, xBedtimeLabelOffset);
-
-        // duration with full hours only
-        this.series[1].paintYAxisTicks(g, new Rectangle(pl, pt, usableWidth, usableHeight), axisWidth, xDurationLabelOffset);
-
-        // rest rating
-        this.series[2].paintYAxisTicks(g, new Rectangle(pl, pt, usableWidth, usableHeight), axisWidth, xRatingLabelOffset);
-
-        // draw all series
-        for (LineSeries s: series) {
-            s.paintLine(g2, new Rectangle(pl, pt, usableWidth, usableHeight));
+        // draw all axis, lines and legends
+        for (int i = 0; i < this.series.length; ++i) {
+            this.series[i].paintLegend(g, xLegendOffset + xLegendOffsetIncrease*i, yLegendOffset);
+            this.series[i].paintYAxisTicks(g, new Rectangle(pl, pt, usableWidth, usableHeight), axisWidth, xLabelOffset + i * xLabelOffsetIncrease);
+            this.series[i].paintLine(g2, new Rectangle(pl + axisWidth, pt, usableWidth, usableHeight));
         }
 
     }
