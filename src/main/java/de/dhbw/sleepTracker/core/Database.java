@@ -17,7 +17,6 @@ public class Database {
   }
 
   public void add(SleepEntry entry, boolean overwrite) throws SleepEntryAlreadyExistsException {
-    System.out.println("Input: " + entry);
 
     for (int i = 0; i < entries.size(); ++i) {
         if (entry.getDate().equals(entries.get(i).getDate())) {
